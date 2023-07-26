@@ -1,0 +1,6 @@
+Official link - https://airflow.apache.org/docs/apache-airflow-providers-apache-kafka/stable/index.html
+
+Installation
+Add- RUN pip install apache-airflow-providers-apache-kafka
+in the Dockerfile
+Now: build the image again and run docker-compose up -d
