@@ -15,8 +15,7 @@ New-Item -ItemType Directory -Force -Path './plugins'
 
 
 •	 Now run the following commands - 
-
-$env:AIRFLOW_UID = 50000
+    $env:AIRFLOW_UID = 50000
 
 •	  docker compose up airflow-init
 •	  docker compose up
