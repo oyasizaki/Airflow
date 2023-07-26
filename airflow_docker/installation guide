@@ -3,10 +3,8 @@ https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index
 
 
 
-•	Create any folder and enter into that directory in command prompt or PowerShell
-•	Run the following command -
-Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml' -OutFile 'docker-compose.yaml'  
-(for windows) (for Linux or mac please for the official link given above )
+•	Navigate to the folder where the docker-compose file is using powershell or terminal.
+
 
 •	Now run the following commands - 
 
