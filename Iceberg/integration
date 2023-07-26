@@ -1,0 +1,61 @@
+To add the iceberg library to Apache Airflow, you can follow these steps:
+
+1. Install the iceberg-airflow package: First, you need to install the necessary package that integrates Iceberg with Airflow. 
+   This package provides operators and hooks to interact with Iceberg tables.
+   You can install the package using pip:
+   pip install iceberg-airflow
+   Make sure you install this package in the same environment where your Airflow instance is running.
+
+2. Import the required modules: In your Airflow DAG file, import the modules from the iceberg-airflow package that you'll be using in your DAG tasks.
+   from iceberg.contrib.operators.iceberg_table_operator import IcebergCreateTableOperator, IcebergDropTableOperator
+   from iceberg.contrib.hooks.iceberg_hook import IcebergHook
+
+3. Define your DAG: Create your Airflow DAG as usual, specifying the necessary parameters such as DAG ID, schedule interval, default arguments, etc.
+
+4. Set up the IcebergHook: Create an instance of the IcebergHook class, which will allow you to interact with the Iceberg tables in your tasks.
+   iceberg_hook = IcebergHook(connection_id='iceberg_default')
+   Note that you need to have a connection configured in Airflow (Admin > Connections) with the name 'iceberg_default', which will contain the connection details (e.g., Iceberg metadata service URI).
+
+5. Use Iceberg operators in your tasks: Now, you can use the IcebergCreateTableOperator and IcebergDropTableOperator to create and drop Iceberg tables, respectively.
+   from airflow import DAG
+
+-------------------------------------Start of dag---------------------------------------
+
+from datetime import datetime
+from iceberg.contrib.operators.iceberg_table_operator import IcebergCreateTableOperator, IcebergDropTableOperator
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2023, 7, 1),
+}
+
+dag = DAG('example_iceberg_dag', default_args=default_args, schedule_interval='@daily')
+
+create_table_task = IcebergCreateTableOperator(
+    task_id='create_iceberg_table',
+    table_name='my_table',
+    schema='name:string, age:int',
+    iceberg_hook=iceberg_hook,
+    dag=dag,
+)
+
+drop_table_task = IcebergDropTableOperator(
+    task_id='drop_iceberg_table',
+    table_name='my_table',
+    iceberg_hook=iceberg_hook,
+    dag=dag,
+)
+
+create_table_task >> drop_table_task
+
+------------------------------------------------ End of dag------------------
+
+
+6. Customize the tasks as needed: You can adjust the operators' parameters based on your specific requirements, such as specifying the database, location, or format of the Iceberg table.
+
+7. Save the DAG: Once you've created and configured your DAG file, save it in the Airflow DAG directory (the folder specified in your Airflow configuration).
+
+8 .Trigger the DAG: If your Airflow instance is running and the DAG files are in the appropriate directory, Airflow should automatically detect the new DAG. Depending on your DAG's schedule_interval, it will be triggered at the specified time, and the tasks will execute, interacting with the Iceberg tables accordingly.
+
+That's it! Now you have integrated Iceberg with Apache Airflow, and you can use the Iceberg operators to manage Iceberg tables as part of your data workflows.
