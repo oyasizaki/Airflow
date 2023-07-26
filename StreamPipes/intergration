@@ -1,0 +1,43 @@
+from airflow import DAG
+from airflow.operators.http_operator import SimpleHttpOperator
+from airflow.utils.dates import days_ago
+from datetime import timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': days_ago(1),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+dag = DAG(
+    'streampipes_integration_example',
+    default_args=default_args,
+    description='An example DAG for integrating StreamPipes with Airflow',
+    schedule_interval=timedelta(days=1),
+)
+
+# Define the StreamPipes API endpoint to trigger a pipeline
+streampipes_api_endpoint = 'http://streampipes-host:port/api/v3/pipelines/<pipeline_id>/start'
+
+# Define the Airflow task to trigger the StreamPipes pipeline
+trigger_streampipes_task = SimpleHttpOperator(
+    task_id='trigger_streampipes_pipeline',
+    method='POST',
+    http_conn_id='streampipes_api_conn',  # Airflow Connection ID containing StreamPipes API details
+    endpoint=streampipes_api_endpoint,
+    headers={'Content-Type': 'application/json'},
+    data='{}',  # You can pass any necessary payload data here, if required by the StreamPipes pipeline
+    response_check=lambda response: True if response.json().get('success', False) else False,
+    dag=dag,
+)
+
+# Define other tasks in your Airflow workflow, if needed
+# For example, you can have tasks that wait for StreamPipes to finish processing data
+
+# Set up the task dependencies
+trigger_streampipes_task
+# Define dependencies for other tasks, if any
+# For example, trigger_streampipes_task >> task_after_streampipes
+
