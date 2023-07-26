@@ -1,0 +1,24 @@
+                                       For docker:
+https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
+
+
+
+•	Create any folder and enter into that directory in command prompt or PowerShell
+•	Run the following command -
+Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml' -OutFile 'docker-compose.yaml'  
+(for windows) (for Linux or mac please for the official link given above )
+
+•	Now run the following commands - 
+
+New-Item -ItemType Directory -Force -Path './dags'
+New-Item -ItemType Directory -Force -Path './logs'
+New-Item -ItemType Directory -Force -Path './plugins'
+(for windows) (for Linux or mac please for the official link given above )
+
+
+•	 Now run the following commands - 
+
+$env:AIRFLOW_UID = 50000
+
+•	  docker compose up airflow-init
+•	  docker compose up
