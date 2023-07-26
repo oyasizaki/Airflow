@@ -1,0 +1,7 @@
+                                           apache-airflow-providers-apache-flink
+
+
+Installation
+Add- RUN pip install apache-airflow-providers-apache-flink
+in the Dockerfile
+Now: build the image again and run docker-compose up -d
